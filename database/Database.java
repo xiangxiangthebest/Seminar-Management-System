@@ -142,19 +142,29 @@ public class Database {
             );
 
             String[][] users = {
-                {"U001","alice","alice@mail.com","1234","student"},
-                {"U002","bob","bob@mail.com","1234","student"},
-                {"U003","drtan","tan@mail.com","1234","evaluator"},
-                {"U004","drlee","lee@mail.com","1234","evaluator"},
-                {"U005","drlim","lim@mail.com","1234","evaluator"},
-                {"U006","drliu","liu@mail.com","1234","evaluator"},
-                {"U007","drgoh","goh@mail.com","1234","evaluator"},
-                {"U008","drlam","lam@mail.com","1234","evaluator"},
-                {"U009","drng","ng@mail.com","1234","evaluator"},
-                {"U010","admin1","admin@mail.com","admin","coordinator"},
-                {"U011","admin2","admin2@mail.com","admin","coordinator"},
-                {"U012","admin3","admin3@mail.com","admin","coordinator"}
+                
+                // STUDENTS
+                {"S001","alice","alice@mail.com","1234","student"},
+                {"S002","bob","bob@mail.com","1234","student"},
+                {"S003","charlie","charlie@mail.com","1234","student"},
+                {"S004","david","david@mail.com","1234","student"},
+                {"S005","eva","eva@mail.com","1234","student"},
+                {"S006","frank","frank@mail.com","1234","student"},
+
+                // EVALUATORS
+                {"E001","drtan","tan@mail.com","1234","evaluator"},
+                {"E002","drlee","lee@mail.com","1234","evaluator"},
+                {"E003","drlim","lim@mail.com","1234","evaluator"},
+                {"E004","drliu","liu@mail.com","1234","evaluator"},
+                {"E005","drgoh","goh@mail.com","1234","evaluator"},
+                {"E006","drlam","lam@mail.com","1234","evaluator"},
+
+                // COORDINATORS
+                {"C001","admin1","admin@mail.com","admin","coordinator"},
+                {"C002","admin2","admin2@mail.com","admin","coordinator"},
+                {"C003","admin3","admin3@mail.com","admin","coordinator"}
             };
+
 
             for (String[] u : users) {
                 for (int i = 0; i < u.length; i++) {
