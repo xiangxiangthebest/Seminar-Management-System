@@ -1,4 +1,5 @@
 package Coordinator;
+
 import java.awt.*;
 import javax.swing.*;
 
@@ -6,26 +7,42 @@ public class CoordinatorDashboard extends JFrame {
 
     public CoordinatorDashboard() {
         setTitle("Coordinator Dashboard");
-        setSize(500, 400);
+        setSize(400, 400);
         setLocationRelativeTo(null);
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        JPanel menu = new JPanel(new GridLayout(3, 2, 15, 15));
-        menu.setBorder(BorderFactory.createEmptyBorder(20,20,20,20));
+        JPanel panel = new JPanel(new GridLayout(0, 1, 10, 10));
 
-        addButton(menu, "Manage Seminar Session", () -> new ManageSessionFrame());
-        addButton(menu, "Generate Schedule", () -> new GenerateScheduleFrame());
-        addButton(menu, "Final Evaluation Report", () -> new FinalReportFrame());
-        addButton(menu, "Award Nomination", () -> new AwardNominationFrame());
-        addButton(menu, "Award Statistics", () -> new AwardStatisticsFrame());
+        JButton btnSession = new JButton("Manage Sessions");
+        btnSession.addActionListener(e -> new ManageSessionFrame());
 
-        add(menu);
+        JButton btnSchedule = new JButton("Generate Schedule");
+        btnSchedule.addActionListener(e -> new GenerateScheduleFrame());
+
+        JButton btnReport = new JButton("Generate Final Report");
+        btnReport.addActionListener(e -> new FinalReportFrame());
+
+        JButton btnAward = new JButton("Award Nomination");
+        btnAward.addActionListener(e -> new AwardNominationFrame());
+
+        JButton btnStats = new JButton("View Award Statistics");
+        btnStats.addActionListener(e -> new AwardStatisticsFrame());
+
+        JButton btnCeremony = new JButton("Award Ceremony Agenda");
+        btnCeremony.addActionListener(e -> new AwardCeremonyFrame());
+
+        panel.add(btnSession);
+        panel.add(btnSchedule);
+        panel.add(btnReport);
+        panel.add(btnAward);
+        panel.add(btnStats);
+        panel.add(btnCeremony);
+
+        add(panel);
         setVisible(true);
     }
 
-    private void addButton(JPanel panel, String title, Runnable action) {
-        JButton btn = new JButton(title);
-        btn.addActionListener(e -> action.run());
-        panel.add(btn);
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(CoordinatorDashboard::new);
     }
 }
