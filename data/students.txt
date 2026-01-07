@@ -1,0 +1,17 @@
+Alice,Deep Learning in Healthcare,"Study of CNNs in medical imaging","Dr. Siti",Oral,slides/alice.pdf
+Bob,AI in Education,"ML model evaluation for e-learning","Dr. Ali",Poster,poster/bob.png
+Charlie,Quantum Computing,"Simulation of qubits","Dr. Kumar",Oral,slides/charlie.pdf
+Diana,Robotics Automation,"Robot path planning algorithms","Dr. Tan",Oral,slides/diana.pdf
+Ethan,Data Science in Finance,"Predictive modeling for stock market","Dr. Lim",Poster,poster/ethan.png
+Fiona,Cybersecurity,"Penetration testing and network defense","Dr. Lee",Poster,poster/fiona.png
+George,Natural Language Processing,"Chatbot design and evaluation","Dr. Noor",Oral,slides/george.pdf
+Hannah,Machine Learning in Finance,"Portfolio optimization using ML","Dr. Tan",Oral,slides/hannah.pdf
+Ian,Blockchain Security,"Smart contract vulnerabilities analysis","Dr. Lim",Poster,poster/ian.png
+Jack,Computer Vision,"Real-time object detection","Dr. Ali",Oral,slides/jack.pdf
+Karen,Data Mining,"Customer segmentation for e-commerce","Dr. Siti",Poster,poster/karen.png
+Leo,Embedded Systems,"IoT device monitoring and control","Dr. Noor",Oral,slides/leo.pdf
+Mia,Natural Language Understanding,"Sentiment analysis on social media","Dr. Kumar",Poster,poster/mia.png
+Nathan,Augmented Reality,"AR application for education","Dr. Lee",Oral,slides/nathan.pdf
+Olivia,Reinforcement Learning,"Optimizing traffic light control","Dr. Tan",Poster,poster/olivia.png
+Paul,Cloud Computing,"Serverless architecture evaluation","Dr. Ali",Oral,slides/paul.pdf
+Quinn,Cyber-Physical Systems,"Smart home automation security","Dr. Siti",Poster,poster/quinn.png
