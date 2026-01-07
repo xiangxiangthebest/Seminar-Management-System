@@ -1,2 +1,7 @@
-StudentA,85
-StudentB,78
+Alice,Dr. Ali,25,25,22,20,Excellent explanation
+Bob,Dr. Siti,22,20,18,20,Good effort
+Charlie,Dr. Kumar,24,23,22,23,Very clear
+Diana,Dr. Tan,26,25,24,25,Outstanding
+Ethan,Dr. Lim,21,22,20,19,Well done
+Fiona,Dr. Lee,22,23,21,20,Good presentation
+George,Dr. Noor,25,24,23,22,Excellent
