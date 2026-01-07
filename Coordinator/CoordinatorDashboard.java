@@ -1,3 +1,4 @@
+package Coordinator;
 import java.awt.*;
 import javax.swing.*;
 
