@@ -1,3 +1,4 @@
+package Coordinator;
 import javax.swing.*;
 
 public class FinalReportFrame extends JFrame {
