@@ -1,3 +1,8 @@
+//read students.txt
+//read evaluators.txt
+//read sessions.txt
+
+
 package Coordinator;
 
 import java.awt.*;
