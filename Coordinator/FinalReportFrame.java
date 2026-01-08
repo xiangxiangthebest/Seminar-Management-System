@@ -1,3 +1,6 @@
+//read evaluations.txt
+//generate final_report.txt
+
 package Coordinator;
 
 import java.awt.*;
