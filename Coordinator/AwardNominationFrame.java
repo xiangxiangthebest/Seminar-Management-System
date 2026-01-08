@@ -1,3 +1,6 @@
+//read sessions.txt
+//read evaluations.txt
+
 package Coordinator;
 
 import java.awt.GridBagConstraints;

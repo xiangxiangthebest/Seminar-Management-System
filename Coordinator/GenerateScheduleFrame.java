@@ -1,3 +1,6 @@
+//read sessions.txt
+//generate final_schedule.txt
+
 package Coordinator;
 
 import java.awt.*;
@@ -9,49 +12,62 @@ public class GenerateScheduleFrame extends JFrame {
 
     public GenerateScheduleFrame() {
         setTitle("Seminar Schedule");
-        setSize(800, 400);
+        setSize(900, 450);   // slightly bigger
         setLocationRelativeTo(null);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-        // Columns for the table
-        String[] columns = {"Session ID", "Day", "Date & Time", "Venue", "Type", "Student", "Evaluator"};
-        DefaultTableModel model = new DefaultTableModel(columns, 0);
+        // Table columns
+        String[] columns = {
+                "Session ID",
+                "Day",
+                "Date & Time",
+                "Venue",
+                "Type",
+                "Student",
+                "Evaluator"
+        };
+
+        DefaultTableModel model = new DefaultTableModel(columns, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false; // read-only table
+            }
+        };
 
         // Read sessions.txt
         List<String[]> sessions = FileUtil.readCSV("data/sessions.txt");
+
         for (String[] row : sessions) {
-            if (row.length >= 6) {
-                // Split first column (Sxxx) and date column
-                String sessionId = row[0];
-                String dateTime = row[1];
-
-                String day = ""; // Default empty
-                String dateTimeOnly = dateTime;
-
-                // If dateTime includes day, split it
-                if (dateTime.contains(",")) {
-                    String[] parts = dateTime.split(",", 2);
-                    day = parts[0].trim();
-                    dateTimeOnly = parts[1].trim();
-                }
-
+            if (row.length >= 7) {
                 model.addRow(new Object[]{
-                        sessionId,
-                        day,
-                        dateTimeOnly,
-                        row[2], // Venue
-                        row[3], // Type
-                        row[4], // Student
-                        row[5]  // Evaluator
+                        row[0].trim(), // Session ID
+                        row[1].trim(), // Day
+                        row[2].trim(), // Date & Time
+                        row[3].trim(), // Venue
+                        row[4].trim(), // Type
+                        row[5].trim(), // Student
+                        row[6].trim()  // Evaluator
                 });
             }
         }
 
         // JTable
         JTable table = new JTable(model);
-        table.setFillsViewportHeight(true);
-        add(new JScrollPane(table), BorderLayout.CENTER);
+        table.setRowHeight(22);
+        table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 
-        // Export button
+        // Set column widths (prevents layout overflow)
+        int[] widths = {90, 90, 160, 140, 80, 120, 120};
+        for (int i = 0; i < widths.length; i++) {
+            table.getColumnModel().getColumn(i).setPreferredWidth(widths[i]);
+        }
+
+        JScrollPane scrollPane = new JScrollPane(table);
+        add(scrollPane, BorderLayout.CENTER);
+
+        // Bottom panel for button
+        JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+
         JButton exportBtn = new JButton("Export Schedule");
         exportBtn.addActionListener(e -> {
             StringBuilder sb = new StringBuilder();
@@ -62,10 +78,15 @@ public class GenerateScheduleFrame extends JFrame {
                 }
                 sb.append("\n");
             }
-            FileUtil.writeLine("data/final_schedule.txt", sb.toString(), true);
-            JOptionPane.showMessageDialog(this, "Schedule exported to data/final_schedule.txt");
+            FileUtil.writeLine("data/final_schedule.txt", sb.toString(), false);
+            JOptionPane.showMessageDialog(this,
+                    "Schedule exported successfully!",
+                    "Export Complete",
+                    JOptionPane.INFORMATION_MESSAGE);
         });
-        add(exportBtn, BorderLayout.SOUTH);
+
+        bottomPanel.add(exportBtn);
+        add(bottomPanel, BorderLayout.SOUTH);
 
         setVisible(true);
     }
