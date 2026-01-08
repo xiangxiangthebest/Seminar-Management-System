@@ -1,3 +1,5 @@
+//read awards.txt
+
 package Coordinator;
 
 import java.awt.*;
