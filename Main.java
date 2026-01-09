@@ -1,11 +1,11 @@
-// MainLoginFrame.java
+// Main.java
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import javax.swing.*;
 
-public class MainLoginFrame extends JFrame {
+public class Main extends JFrame {
 
-    public MainLoginFrame() {
+    public Main() {
         setTitle("Seminar Management System - Login");
         setSize(400, 200);
         setLocationRelativeTo(null); // center the window
@@ -52,7 +52,8 @@ public class MainLoginFrame extends JFrame {
 
         // Actions for Student and Evaluator
         studentBtn.addActionListener(e -> {
-            JOptionPane.showMessageDialog(this, "Student login not implemented yet!");
+            new Student.LoginFrame();
+            dispose();
         });
 
         evaluatorBtn.addActionListener(e -> {
@@ -64,6 +65,6 @@ public class MainLoginFrame extends JFrame {
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new MainLoginFrame());
+        SwingUtilities.invokeLater(() -> new Main());
     }
 }
