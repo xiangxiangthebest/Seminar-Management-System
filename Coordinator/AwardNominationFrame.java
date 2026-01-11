@@ -37,12 +37,14 @@ public class AwardNominationFrame extends JFrame {
         gbc.fill = GridBagConstraints.HORIZONTAL;
 
         /* ---------------------------------
-           STEP 1: Read awards.txt
+           STEP 1: Read awards.txt and count awards
            --------------------------------- */
         Map<String, Integer> awardCount = new HashMap<>();
         Set<String> awardedStudents = new HashSet<>();
 
         List<String[]> awards = FileUtil.readCSV("data/awards.txt");
+        List<String[]> sessions = FileUtil.readCSV("data/sessions.txt");
+        
         for (String[] row : awards) {
             if (row.length >= 2) {
                 String awardName = row[0].trim();
@@ -58,16 +60,19 @@ public class AwardNominationFrame extends JFrame {
         }
 
         /* ---------------------------------
-           STEP 2: Award dropdown (check quota)
+           STEP 2: Award dropdown (check quota with limits)
            --------------------------------- */
         DefaultComboBoxModel<String> awardModel = new DefaultComboBoxModel<>();
 
+        // Best Oral: limit to 2
         if (awardCount.getOrDefault("Best Oral", 0) < 2)
             awardModel.addElement("Best Oral");
 
+        // Best Poster: limit to 2
         if (awardCount.getOrDefault("Best Poster", 0) < 2)
             awardModel.addElement("Best Poster");
 
+        // People Choice: limit to 3
         if (awardCount.getOrDefault("People Choice", 0) < 3)
             awardModel.addElement("People Choice");
 
@@ -84,10 +89,9 @@ public class AwardNominationFrame extends JFrame {
            STEP 3: Load data files
            --------------------------------- */
         List<String[]> evaluations = FileUtil.readCSV("data/evaluations.txt");
-        List<String[]> sessions = FileUtil.readCSV("data/sessions.txt");
 
         /* ---------------------------------
-           STEP 4: Update student list
+           STEP 4: Update student list based on award type
            --------------------------------- */
         award.addActionListener(e -> {
             student.removeAllItems();
@@ -102,29 +106,20 @@ public class AwardNominationFrame extends JFrame {
 
             for (String[] eval : evaluations) {
                 try {
-                    String studentName = eval[0];
+                    String studentName = eval[0].trim();
 
                     double total =
-                            Double.parseDouble(eval[2]) +
-                            Double.parseDouble(eval[3]) +
-                            Double.parseDouble(eval[4]) +
-                            Double.parseDouble(eval[5]);
-
+                        Double.parseDouble(eval[2].trim()) +
+                        Double.parseDouble(eval[3].trim()) +
+                        Double.parseDouble(eval[4].trim()) +
+                        Double.parseDouble(eval[5].trim());
+                    
                     // Must be >90 and not already awarded
                     if (total <= 90 || awardedStudents.contains(studentName))
                         continue;
 
-                    String presentationType = getPresentationType(studentName, sessions);
-
-                    if (selectedAward.equals("People Choice")) {
-                        eligible.add(studentName);
-                    } else if (selectedAward.equals("Best Oral")
-                            && "Oral".equalsIgnoreCase(presentationType)) {
-                        eligible.add(studentName);
-                    } else if (selectedAward.equals("Best Poster")
-                            && "Poster".equalsIgnoreCase(presentationType)) {
-                        eligible.add(studentName);
-                    }
+                    // All awards available for all eligible students (no session type restriction)
+                    eligible.add(studentName);
 
                 } catch (Exception ex) {
                     // skip invalid rows
@@ -182,18 +177,6 @@ public class AwardNominationFrame extends JFrame {
 
         add(panel);
         setVisible(true);
-    }
-
-    /* ---------------------------------
-       Helper Methods
-       --------------------------------- */
-    private String getPresentationType(String student, List<String[]> sessions) {
-        for (String[] s : sessions) {
-            if (s.length >= 5 && s[4].equals(student)) {
-                return s[3]; // Oral / Poster
-            }
-        }
-        return "";
     }
 
     private void addRow(JPanel panel, GridBagConstraints gbc,
