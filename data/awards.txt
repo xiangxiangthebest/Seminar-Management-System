@@ -1,4 +1,3 @@
 Best Oral,Charlie
-People Choice,Alice
-People Choice,George
 People Choice,Diana
+Best Oral,Alice
