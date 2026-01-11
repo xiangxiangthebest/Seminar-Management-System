@@ -1,6 +1,3 @@
-//read sessions.txt
-//read evaluations.txt
-
 package Coordinator;
 
 import java.awt.GridBagConstraints;
@@ -37,14 +34,18 @@ public class AwardNominationFrame extends JFrame {
         gbc.fill = GridBagConstraints.HORIZONTAL;
 
         /* ---------------------------------
-           STEP 1: Read awards.txt and count awards
+           STEP 1: Read files
+           --------------------------------- */
+        List<String[]> awards = FileUtil.readCSV("data/awards.txt");
+        List<String[]> sessions = FileUtil.readCSV("data/sessions.txt");
+        List<String[]> evaluations = FileUtil.readCSV("data/evaluations.txt");
+
+        /* ---------------------------------
+           STEP 2: Count awards + awarded students
            --------------------------------- */
         Map<String, Integer> awardCount = new HashMap<>();
         Set<String> awardedStudents = new HashSet<>();
 
-        List<String[]> awards = FileUtil.readCSV("data/awards.txt");
-        List<String[]> sessions = FileUtil.readCSV("data/sessions.txt");
-        
         for (String[] row : awards) {
             if (row.length >= 2) {
                 String awardName = row[0].trim();
@@ -54,25 +55,34 @@ public class AwardNominationFrame extends JFrame {
                         awardName,
                         awardCount.getOrDefault(awardName, 0) + 1
                 );
-
                 awardedStudents.add(studentName);
             }
         }
 
         /* ---------------------------------
-           STEP 2: Award dropdown (check quota with limits)
+           STEP 3: Map student → session type
+           --------------------------------- */
+        Map<String, String> studentSessionType = new HashMap<>();
+
+        for (String[] row : sessions) {
+            if (row.length >= 6) {
+                String sessionType = row[4].trim(); // Oral / Poster
+                String studentName = row[5].trim();
+                studentSessionType.put(studentName, sessionType);
+            }
+        }
+
+        /* ---------------------------------
+           STEP 4: Award dropdown (with limits)
            --------------------------------- */
         DefaultComboBoxModel<String> awardModel = new DefaultComboBoxModel<>();
 
-        // Best Oral: limit to 2
         if (awardCount.getOrDefault("Best Oral", 0) < 2)
             awardModel.addElement("Best Oral");
 
-        // Best Poster: limit to 2
         if (awardCount.getOrDefault("Best Poster", 0) < 2)
             awardModel.addElement("Best Poster");
 
-        // People Choice: limit to 3
         if (awardCount.getOrDefault("People Choice", 0) < 3)
             awardModel.addElement("People Choice");
 
@@ -86,12 +96,7 @@ public class AwardNominationFrame extends JFrame {
         }
 
         /* ---------------------------------
-           STEP 3: Load data files
-           --------------------------------- */
-        List<String[]> evaluations = FileUtil.readCSV("data/evaluations.txt");
-
-        /* ---------------------------------
-           STEP 4: Update student list based on award type
+           STEP 5: Update student list by award
            --------------------------------- */
         award.addActionListener(e -> {
             student.removeAllItems();
@@ -113,16 +118,29 @@ public class AwardNominationFrame extends JFrame {
                         Double.parseDouble(eval[3].trim()) +
                         Double.parseDouble(eval[4].trim()) +
                         Double.parseDouble(eval[5].trim());
-                    
-                    // Must be >90 and not already awarded
+
+                    // Score + already-awarded check
                     if (total <= 90 || awardedStudents.contains(studentName))
                         continue;
 
-                    // All awards available for all eligible students (no session type restriction)
+                    // Must exist in sessions
+                    String sessionType = studentSessionType.get(studentName);
+                    if (sessionType == null)
+                        continue;
+
+                    // Award-specific restrictions
+                    if ("Best Oral".equals(selectedAward)
+                            && !"Oral".equalsIgnoreCase(sessionType))
+                        continue;
+
+                    if ("Best Poster".equals(selectedAward)
+                            && !"Poster".equalsIgnoreCase(sessionType))
+                        continue;
+
                     eligible.add(studentName);
 
                 } catch (Exception ex) {
-                    // skip invalid rows
+                    // Skip invalid row
                 }
             }
 
@@ -136,7 +154,7 @@ public class AwardNominationFrame extends JFrame {
         });
 
         if (award.isEnabled()) {
-            award.setSelectedIndex(0); // trigger load
+            award.setSelectedIndex(0); // auto-load students
         }
 
         /* ---------------------------------
@@ -151,7 +169,7 @@ public class AwardNominationFrame extends JFrame {
         panel.add(save, gbc);
 
         /* ---------------------------------
-           STEP 5: Save nomination
+           STEP 6: Save nomination
            --------------------------------- */
         save.addActionListener(e -> {
 
