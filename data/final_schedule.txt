@@ -1,0 +1,11 @@
+S001,,Friday, 2026-01-10 10:00,FCI BR1012,Oral,Alice
+S002,,Friday, 2026-01-10 11:00,FCI BR1013,Poster,Bob
+S003,,Friday, 2026-01-10 12:00,FCI BR1014,Oral,Charlie
+S004,,Saturday, 2026-01-11 09:00,FCI BR1015,Oral,Diana
+S005,,Saturday, 2026-01-11 10:00,FCI BR1016,Poster,Ethan
+S006,,Saturday, 2026-01-11 11:00,FCI BR1017,Poster,Fiona
+S007,,Saturday, 2026-01-11 12:00,FCI BR1018,Oral,George
+S008,,Wednesday, 2026-01-07 22:18,FCI BR1012,Oral,Alice
+S009,,Thursday, 2026-01-02 21:22,FCI BR1012,Poster,Alice
+S010,,Wednesday, 2026-01-07 22:25,FCI BR1012,Oral,Alice
+
