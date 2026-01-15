@@ -1,6 +1,7 @@
 package evaluator;
 
 import javax.swing.*;
+import java.awt.*;
 
 public class EvaluatorDashboard extends JFrame {
 
@@ -14,42 +15,56 @@ public class EvaluatorDashboard extends JFrame {
         setSize(600, 400);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLayout(new BorderLayout());
 
-        // ===== MENU BAR =====
-        JMenuBar menuBar = new JMenuBar();
-        JMenu menu = new JMenu("Menu");
-
-        JMenuItem viewStudents = new JMenuItem("View My Students");
-        JMenuItem viewSessions = new JMenuItem("View My Sessions");
-        JMenuItem viewSubmissions = new JMenuItem("View Submissions");
-        JMenuItem evaluateStudents = new JMenuItem("Evaluate Students");
-
-        viewStudents.addActionListener(e ->
-                new MyStudentsView(evaluatorName).setVisible(true));
-
-        viewSessions.addActionListener(e ->
-                new MySessionsView(evaluatorName).setVisible(true));
-
-        viewSubmissions.addActionListener(e ->
-                JOptionPane.showMessageDialog(this,
-                        "View Submissions - Coming Soon"));
-
-               evaluateStudents.addActionListener(e ->
-        new EvaluateSessionView(evaluatorName).setVisible(true));
-
-
-        menu.add(viewStudents);
-        menu.add(viewSessions);
-        menu.add(viewSubmissions);
-        menu.add(evaluateStudents);
-
-        menuBar.add(menu);
-        setJMenuBar(menuBar);
-
+        
         JLabel lblWelcome = new JLabel(
                 "Logged in as: " + evaluatorName,
                 SwingConstants.CENTER);
+        lblWelcome.setFont(new Font("Arial", Font.BOLD, 16));
+        lblWelcome.setBorder(BorderFactory.createEmptyBorder(15, 10, 15, 10));
 
-        add(lblWelcome);
+        add(lblWelcome, BorderLayout.NORTH);
+
+        // MENU PANEL 
+        JPanel menuPanel = new JPanel();
+        menuPanel.setLayout(new BoxLayout(menuPanel, BoxLayout.Y_AXIS));
+        menuPanel.setBorder(BorderFactory.createEmptyBorder(20, 150, 20, 150));
+
+        JButton btnViewStudents = new JButton("View My Students");
+        JButton btnViewSessions = new JButton("View My Sessions");
+        JButton btnViewSubmissions = new JButton("View Submissions");
+        JButton btnEvaluateStudents = new JButton("Evaluate Students");
+
+        Dimension buttonSize = new Dimension(250, 40);
+
+        JButton[] buttons = {
+                btnViewStudents,
+                btnViewSessions,
+                btnViewSubmissions,
+                btnEvaluateStudents
+        };
+
+        for (JButton btn : buttons) {
+            btn.setMaximumSize(buttonSize);
+            btn.setAlignmentX(Component.CENTER_ALIGNMENT);
+            menuPanel.add(btn);
+            menuPanel.add(Box.createVerticalStrut(15));
+        }
+
+        add(menuPanel, BorderLayout.CENTER);
+
+       
+        btnViewStudents.addActionListener(e ->
+                new MyStudentsView(evaluatorName).setVisible(true));
+
+        btnViewSessions.addActionListener(e ->
+                new MySessionsView(evaluatorName).setVisible(true));
+
+        btnViewSubmissions.addActionListener(e ->
+                new ViewSubmissionsView(evaluatorName).setVisible(true));
+
+        btnEvaluateStudents.addActionListener(e ->
+                new EvaluateSessionView(evaluatorName).setVisible(true));
     }
 }

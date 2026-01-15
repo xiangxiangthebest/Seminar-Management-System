@@ -44,7 +44,7 @@ public class MyStudentsView extends JFrame {
             String line;
             while ((line = br.readLine()) != null) {
 
-                // Proper CSV split (handles quotes)
+                
                 String[] data = line.split(
                         ",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)");
 
@@ -55,7 +55,7 @@ public class MyStudentsView extends JFrame {
                 String type = data[4].trim();
                 String file = data[5].trim();
 
-                // FILTER by logged-in evaluator
+                
                 if (supervisor.equalsIgnoreCase(evaluatorName)) {
 
                     model.addRow(new Object[]{

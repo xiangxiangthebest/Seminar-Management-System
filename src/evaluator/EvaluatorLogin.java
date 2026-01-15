@@ -7,55 +7,61 @@ import java.io.*;
 
 public class EvaluatorLogin extends JFrame {
 
-    JTextField txtUsername;
-    JPasswordField txtPassword;
-    JButton btnLogin;
-    JLabel lblMessage;
+    private JTextField txtUsername;
+    private JPasswordField txtPassword;
+    private JButton btnLogin;
+    private JLabel lblMessage;
 
     public EvaluatorLogin() {
 
-        // Window title
         setTitle("Evaluator Login");
-
-        // Window size
-        setSize(350, 220);
-
-        // Close program when window closes
+        setSize(400, 250);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLocationRelativeTo(null); 
 
-        // Center window
-        setLocationRelativeTo(null);
+        // ===== MAIN PANEL =====
+        JPanel mainPanel = new JPanel();
+        mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
+        mainPanel.setBorder(BorderFactory.createEmptyBorder(20, 50, 20, 50)); 
 
-        // Layout
-        setLayout(new GridLayout(5, 1));
-
-        // Components
-        JLabel lblUser = new JLabel("Evaluator Name:");
+        // ===== USER PANEL =====
+        JPanel userPanel = new JPanel(new BorderLayout(5, 5));
+        JLabel lblUser = new JLabel("Username:");
         txtUsername = new JTextField();
+        userPanel.add(lblUser, BorderLayout.WEST);
+        userPanel.add(txtUsername, BorderLayout.CENTER);
+        mainPanel.add(userPanel);
+        mainPanel.add(Box.createVerticalStrut(15)); 
 
+        //PASSWORD PANEL
+        JPanel passPanel = new JPanel(new BorderLayout(5, 5));
         JLabel lblPass = new JLabel("Password:");
         txtPassword = new JPasswordField();
+        passPanel.add(lblPass, BorderLayout.WEST);
+        passPanel.add(txtPassword, BorderLayout.CENTER);
+        mainPanel.add(passPanel);
+        mainPanel.add(Box.createVerticalStrut(20));
 
+        //LOGIN BUTTON 
         btnLogin = new JButton("Login");
+        btnLogin.setAlignmentX(Component.CENTER_ALIGNMENT);
+        mainPanel.add(btnLogin);
+
+        mainPanel.add(Box.createVerticalStrut(15)); 
+
+        //MESSAGE LABEL
         lblMessage = new JLabel("", SwingConstants.CENTER);
+        lblMessage.setForeground(Color.RED);
+        lblMessage.setAlignmentX(Component.CENTER_ALIGNMENT);
+        mainPanel.add(lblMessage);
 
-        // Add components to window
-        add(lblUser);
-        add(txtUsername);
-        add(lblPass);
-        add(txtPassword);
-        add(btnLogin);
-        add(lblMessage);
+        add(mainPanel);
 
-        // Button click event
-        btnLogin.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                login();
-            }
-        });
+        
+        btnLogin.addActionListener(e -> login());
     }
 
-    // LOGIN LOGIC
+    // LOGIN 
     private void login() {
         String username = txtUsername.getText().trim();
         String password = new String(txtPassword.getPassword());
@@ -65,10 +71,8 @@ public class EvaluatorLogin extends JFrame {
             JOptionPane.showMessageDialog(this,
                     "Login Successful!\nWelcome " + username);
 
-            // Open Dashboard and pass evaluator name
+           
             new EvaluatorDashboard(username).setVisible(true);
-
-            // Close login window
             this.dispose();
 
         } else {
@@ -84,7 +88,6 @@ public class EvaluatorLogin extends JFrame {
 
             String line;
             while ((line = br.readLine()) != null) {
-                System.out.println("Comparing [" + line + "] with [" + username + "]");
                 if (line.trim().equalsIgnoreCase(username)) {
                     br.close();
                     return true;
@@ -97,8 +100,8 @@ public class EvaluatorLogin extends JFrame {
         return false;
     }
 
-    // MAIN METHOD (Program starts here)
+    
     public static void main(String[] args) {
-        new EvaluatorLogin().setVisible(true);
+        SwingUtilities.invokeLater(() -> new EvaluatorLogin().setVisible(true));
     }
 }

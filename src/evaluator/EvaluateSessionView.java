@@ -28,7 +28,7 @@ public class EvaluateSessionView extends JFrame {
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());
 
-        // ===== TOP PANEL =====
+       
         JPanel topPanel = new JPanel(new FlowLayout());
 
         topPanel.add(new JLabel("Select Session ID:"));
@@ -40,7 +40,7 @@ public class EvaluateSessionView extends JFrame {
         topPanel.add(sessionDropdown);
         add(topPanel, BorderLayout.NORTH);
 
-        // ===== CENTER PANEL =====
+        
         JPanel centerPanel = new JPanel();
         centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.Y_AXIS));
 
@@ -58,12 +58,12 @@ public class EvaluateSessionView extends JFrame {
 
         centerPanel.add(Box.createVerticalStrut(10));
 
-        // ===== RUBRICS (MARKS ONLY) =====
+        // RUBRICS 
         String[] rubrics = {
-                "Rubric 1: Content Quality",
-                "Rubric 2: Presentation Skills",
-                "Rubric 3: Technical Understanding",
-                "Rubric 4: Q&A Handling"
+                "Rubric 1: Problem Clarity",
+                "Rubric 2: Methodology",
+                "Rubric 3: Results",
+                "Rubric 4: Presentation"
         };
 
         for (int i = 0; i < 4; i++) {
@@ -77,7 +77,7 @@ public class EvaluateSessionView extends JFrame {
             centerPanel.add(rubricPanel);
         }
 
-        // ===== OVERALL COMMENT =====
+        //  COMMENT 
         JPanel commentPanel = new JPanel(new BorderLayout());
         commentPanel.setBorder(BorderFactory.createTitledBorder("Overall Comment"));
 
@@ -86,7 +86,7 @@ public class EvaluateSessionView extends JFrame {
 
         centerPanel.add(commentPanel);
 
-        // ===== SUBMIT BUTTON =====
+        
         JButton submitBtn = new JButton("Submit Evaluation");
         submitBtn.addActionListener(e -> submitEvaluation());
 
@@ -96,7 +96,7 @@ public class EvaluateSessionView extends JFrame {
         add(new JScrollPane(centerPanel), BorderLayout.CENTER);
     }
 
-    // ===== LOAD SESSIONS =====
+    
     private void loadSessions() {
         try (BufferedReader br = new BufferedReader(new FileReader("data/sessions.txt"))) {
             String line;
@@ -121,7 +121,7 @@ public class EvaluateSessionView extends JFrame {
         }
     }
 
-    // ===== UPDATE STUDENT INFO =====
+   
     private void updateStudentInfo() {
         String sessionId = (String) sessionDropdown.getSelectedItem();
         if (sessionId == null) return;
@@ -152,7 +152,7 @@ public class EvaluateSessionView extends JFrame {
         }
     }
 
-    // ===== SUBMIT EVALUATION =====
+    
     private void submitEvaluation() {
 
         try (BufferedWriter bw = new BufferedWriter(
