@@ -44,8 +44,8 @@ public class UploadPresentation extends JFrame {
             List<String[]> students = FileUtil.readCSV(STUDENT_FILE);
             for (int i = 0; i < students.size(); i++) {
                 if (students.get(i).length > 0 && students.get(i)[0].equals(studentId)) {
-                    if (students.get(i).length < 7) students.set(i, java.util.Arrays.copyOf(students.get(i), 7));
-                    students.get(i)[6] = path.getText();
+                    if (students.get(i).length < 8) students.set(i, java.util.Arrays.copyOf(students.get(i), 8));
+                    students.get(i)[7] = path.getText();
                     break;
                 }
             }
