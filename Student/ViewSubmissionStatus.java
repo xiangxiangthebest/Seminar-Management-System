@@ -44,12 +44,11 @@ public class ViewSubmissionStatus extends JFrame {
         if (studentData == null) {
             submissionPanel.add(createLabel("No submission found"));
         } else {
-            submissionPanel.add(createFieldLabel("Title:", studentData[2]));
-            submissionPanel.add(createFieldLabel("Abstract:", studentData[3]));
-            submissionPanel.add(createFieldLabel("Supervisor:", studentData[4]));
-            submissionPanel.add(createFieldLabel("Type:", studentData[5]));
-            submissionPanel.add(createFieldLabel("File:", studentData.length > 6 && !studentData[6].isEmpty() ? studentData[6] : "Not uploaded"));
-            submissionPanel.add(createFieldLabel("Status:", "Pending Evaluation"));
+            submissionPanel.add(createFieldLabel("Title:", studentData[3]));
+            submissionPanel.add(createFieldLabel("Abstract:", studentData[4]));
+            submissionPanel.add(createFieldLabel("Supervisor:", studentData[5]));
+            submissionPanel.add(createFieldLabel("Type:", studentData[6]));
+            submissionPanel.add(createFieldLabel("File:", studentData.length > 7 && !studentData[7].isEmpty() ? studentData[7] : "Not uploaded"));
         }
 
         mainPanel.add(submissionPanel);

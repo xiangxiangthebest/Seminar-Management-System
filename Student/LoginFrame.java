@@ -10,11 +10,10 @@ public class LoginFrame extends JFrame {
     private JPasswordField password;
 
     private static final String STUDENT_FILE = "data/students.txt";
-    private static final String FIXED_PASSWORD = "1234";
 
     public LoginFrame() {
         setTitle("Seminar Management System - Login");
-        setSize(400, 220);
+        setSize(400, 260); // slightly taller for Sign Up button
         setLocationRelativeTo(null);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
@@ -42,7 +41,18 @@ public class LoginFrame extends JFrame {
         gbc.gridx = 1; gbc.gridy = 2;
         panel.add(loginBtn, gbc);
 
+        // 🔹 NEW: Sign Up button
+        JButton signupBtn = new JButton("Sign Up");
+        gbc.gridx = 1; gbc.gridy = 3;
+        panel.add(signupBtn, gbc);
+
         loginBtn.addActionListener(e -> login());
+
+        // 🔹 NEW: Sign Up action
+        signupBtn.addActionListener(e -> {
+            new SignupFrame();
+            dispose();
+        });
 
         add(panel);
         setVisible(true);
@@ -57,31 +67,22 @@ public class LoginFrame extends JFrame {
             return;
         }
 
-        if (!pwdInput.equals(FIXED_PASSWORD)) {
-            JOptionPane.showMessageDialog(this, "Invalid password");
-            return;
-        }
-
-        // ---------------- Find student in students.txt ----------------
         List<String[]> students = FileUtil.readCSV(STUDENT_FILE);
-        String studentId = null;
-        String studentName = null;
 
         for (String[] s : students) {
-            if (s.length > 1 && s[1].trim().equalsIgnoreCase(nameInput)) {
-                studentId = s[0].trim();
-                studentName = s[1].trim();
-                break;
+            if (s.length >= 3) {
+                String username = s[1].trim();
+                String password = s[2].trim();
+
+                if (username.equalsIgnoreCase(nameInput) && password.equals(pwdInput)) {
+                    new StudentDashboard(s[0], s[1]);
+                    dispose();
+                    return;
+                }
             }
         }
 
-        if (studentId != null && studentName != null) {
-            // Pass both studentId and studentName to Dashboard
-            new StudentDashboard(studentId, studentName);
-            dispose();
-        } else {
-            JOptionPane.showMessageDialog(this, "Student name not found");
-        }
+        JOptionPane.showMessageDialog(this, "Invalid username or password");
     }
 
     public static void main(String[] args) {

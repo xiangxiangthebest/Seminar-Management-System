@@ -57,9 +57,27 @@ public class FileUtil {
 
     // ===================== APPEND ONE LINE =====================
     public static void writeLine(String filePath, String line) {
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(filePath, true))) {
-            bw.write(line);
-            bw.newLine();
+        try {
+            File file = new File(filePath);
+
+            // If file exists and is not empty, ensure it ends with a newline
+            if (file.exists() && file.length() > 0) {
+                try (RandomAccessFile raf = new RandomAccessFile(file, "r")) {
+                    raf.seek(file.length() - 1);
+                    if (raf.readByte() != '\n') {
+                        try (FileWriter fw = new FileWriter(file, true)) {
+                            fw.write(System.lineSeparator());
+                        }
+                    }
+                }
+            }
+
+            // Append the new line
+            try (BufferedWriter bw = new BufferedWriter(new FileWriter(file, true))) {
+                bw.write(line);
+                bw.newLine();
+            }
+
         } catch (IOException e) {
             e.printStackTrace();
         }

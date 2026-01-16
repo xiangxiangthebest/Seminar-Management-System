@@ -55,10 +55,10 @@ public class RegisterSeminar extends JFrame {
             List<String[]> students = FileUtil.readCSV(STUDENT_FILE);
             for (int i = 0; i < students.size(); i++) {
                 if (students.get(i)[0].equals(studentId)) {
-                    students.get(i)[2] = title.getText();
-                    students.get(i)[3] = abs.getText();
-                    students.get(i)[4] = supervisor.getText();
-                    students.get(i)[5] = type;
+                    students.get(i)[3] = title.getText();
+                    students.get(i)[4] = abs.getText();
+                    students.get(i)[5] = supervisor.getText();
+                    students.get(i)[6] = type;
                     break;
                 }
             }
