@@ -57,7 +57,8 @@ public class Main extends JFrame {
         });
 
         evaluatorBtn.addActionListener(e -> {
-            JOptionPane.showMessageDialog(this, "Evaluator login not implemented yet!");
+            new Coordinator.LoginFrame();
+            dispose();
         });
 
         add(panel);
