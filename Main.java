@@ -57,7 +57,7 @@ public class Main extends JFrame {
         });
 
         evaluatorBtn.addActionListener(e -> {
-            new Coordinator.LoginFrame();
+            new Evaluator.EvaluatorLogin().setVisible(true);
             dispose();
         });
 
