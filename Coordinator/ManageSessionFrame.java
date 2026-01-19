@@ -60,7 +60,7 @@ public class ManageSessionFrame extends JFrame {
 
         java.util.List<String> availableStudents = new java.util.ArrayList<>();
         for (String[] s : students) {
-            String studentName = s[0].trim(); // TRIM spaces!
+            String studentName = s[1].trim(); // Student name is at index 1
             if (!assignedStudents.contains(studentName)) {
                 availableStudents.add(studentName);
             }
