@@ -1,2 +1,18 @@
-
-viinieesh,Dr. Ali,10,20,10,19,all good 1
+Alice,Dr. Ali,18,19,18,19
+Bob,Dr. Siti,16,17,18,17
+Charlie,Dr. Kumar,20,19,20,19
+Diana,Dr. Tan,17,18,19,18
+Ethan,Dr. Lim,16,16,17,16
+Fiona,Dr. Lee,18,18,19,18
+George,Dr. Ali,19,19,20,20
+Hannah,Dr. Ali,17,18,17,18
+Ian,Dr. Ali,18,18,19,18
+Jack,Dr. Ali,16,17,18,17
+Karen,Dr. Ali,19,19,20,19
+Leo,Dr. Ali,18,19,18,19
+Mia,Dr. Ali,20,20,20,20
+Nathan,Dr. Ali,17,18,19,18
+Quinn,Dr. Ali,16,17,16,17
+Olivia,Dr. Ali,18,19,19,20
+Paul,Dr. Ali,17,18,18,18
+Leo,Dr. Ali,20,20,20,20,good

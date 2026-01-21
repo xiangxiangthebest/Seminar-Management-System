@@ -1,9 +1,9 @@
 package Evaluator;
 
-import javax.swing.*;
 import java.awt.*;
 import java.io.*;
 import java.util.*;
+import javax.swing.*;
 
 public class EvaluateSessionView extends JFrame {
 
@@ -172,6 +172,15 @@ public class EvaluateSessionView extends JFrame {
     
     private void submitEvaluation() {
         try {
+            // Validate that a student is selected
+            if (selectedStudent == null || selectedStudent.isEmpty()) {
+                JOptionPane.showMessageDialog(this,
+                        "Please select a session first.",
+                        "Error",
+                        JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
             StringBuilder sb = new StringBuilder();
             sb.append(selectedStudent).append(",").append(evaluatorName);
 
@@ -183,12 +192,16 @@ public class EvaluateSessionView extends JFrame {
                     mark = Integer.parseInt(markStr);
                     if (mark < 0 || mark > 20) {
                         JOptionPane.showMessageDialog(this,
-                                "Rubric " + (i + 1) + " marks must be between 0 and 20.");
+                                "Rubric " + (i + 1) + " marks must be between 0 and 20.",
+                                "Invalid Input",
+                                JOptionPane.ERROR_MESSAGE);
                         return;
                     }
                 } catch (NumberFormatException ex) {
                     JOptionPane.showMessageDialog(this,
-                            "Rubric " + (i + 1) + " marks must be a number.");
+                            "Rubric " + (i + 1) + " marks must be a number.",
+                            "Invalid Input",
+                            JOptionPane.ERROR_MESSAGE);
                     return;
                 }
                 sb.append(",").append(mark);
@@ -199,13 +212,32 @@ public class EvaluateSessionView extends JFrame {
             try (BufferedWriter bw = new BufferedWriter(new FileWriter("data/evaluations.txt", true))) {
                 bw.write(sb.toString());
                 bw.newLine();
+                bw.flush();
             }
 
-            JOptionPane.showMessageDialog(this, "Evaluation submitted successfully!");
+            JOptionPane.showMessageDialog(this, 
+                    "Evaluation submitted successfully!",
+                    "Success",
+                    JOptionPane.INFORMATION_MESSAGE);
+            
+            // Clear fields for next evaluation
+            for (JTextField field : markFields) {
+                field.setText("");
+            }
+            overallCommentArea.setText("");
+            
+            // Reload sessions dropdown
+            sessionDropdown.removeAllItems();
+            sessionData.clear();
+            loadSessions();
+            
             dispose();
 
         } catch (IOException e) {
-            JOptionPane.showMessageDialog(this, "Error saving evaluation.");
+            JOptionPane.showMessageDialog(this, 
+                    "Error saving evaluation: " + e.getMessage(),
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
         }
     }
 
