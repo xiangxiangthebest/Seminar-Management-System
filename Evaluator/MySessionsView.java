@@ -18,7 +18,7 @@ public class MySessionsView extends JFrame {
         setSize(900, 300);
         setLocationRelativeTo(null);
 
-        // Table columns
+        
         String[] columns = {
                 "Session ID",
                 "Day",
@@ -55,7 +55,7 @@ public class MySessionsView extends JFrame {
                 String studentName = data[5].trim();
                 String evaluator = data[6].trim();
 
-                // FILTER BY LOGGED-IN EVALUATOR
+                
                 if (evaluator.equalsIgnoreCase(evaluatorName)) {
 
                     model.addRow(new Object[]{

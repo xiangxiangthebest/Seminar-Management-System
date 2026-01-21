@@ -58,8 +58,9 @@ public class Main extends JFrame {
 
         evaluatorBtn.addActionListener(e -> {
             new Evaluator.EvaluatorLogin().setVisible(true);
-            dispose();
+             dispose();
         });
+
 
         add(panel);
         setVisible(true);
