@@ -15,3 +15,4 @@ STU014,Nathan,1234,Augmented Reality,AR application for education,Dr. Lee,Oral,s
 STU015,Olivia,1234,Reinforcement Learning,Optimizing traffic light control,Dr. Tan,Poster,poster/olivia.png
 STU016,Paul,1234,Cloud Computing,Serverless architecture evaluation,Dr. Ali,Oral,slides/paul.pdf
 STU017,Quinn,1234,Cyber-Physical Systems,Smart home automation security,Dr. Siti,Poster,poster/quinn.png
+STU018,viinieesh,1234,test topic,test topic 1,Dr. Ali,Oral,C:\Users\ASUS\Documents\COMPNET_LAB\lab-5-Default.pkt
