@@ -41,23 +41,18 @@ public class AwardNominationFrame extends JFrame {
         List<String[]> evaluations = FileUtil.readCSV("data/evaluations.txt");
 
         /* ---------------------------------
-           STEP 2: Count awards + awarded students
+           STEP 2: Track awarded students
            --------------------------------- */
-        Map<String, Integer> awardCount = new HashMap<>();
         Set<String> awardedStudents = new HashSet<>();
 
         for (String[] row : awards) {
             if (row.length >= 2) {
-                String awardName = row[0].trim();
                 String studentName = row[1].trim();
-
-                awardCount.put(
-                        awardName,
-                        awardCount.getOrDefault(awardName, 0) + 1
-                );
                 awardedStudents.add(studentName);
             }
         }
+
+        System.out.println("Already awarded students: " + awardedStudents);
 
         /* ---------------------------------
            STEP 3: Map student → session type
@@ -72,80 +67,130 @@ public class AwardNominationFrame extends JFrame {
             }
         }
 
+        System.out.println("Student session types: " + studentSessionType);
+
         /* ---------------------------------
-           STEP 4: Award dropdown (with limits)
+           STEP 4: Count current awards per category
+           --------------------------------- */
+        Map<String, Integer> awardCount = new HashMap<>();
+        awardCount.put("Best Oral", 0);
+        awardCount.put("Best Poster", 0);
+        awardCount.put("People Choice", 0);
+
+        for (String[] row : awards) {
+            if (row.length >= 1) {
+                String awardType = row[0].trim();
+                awardCount.put(awardType, awardCount.getOrDefault(awardType, 0) + 1);
+            }
+        }
+
+        System.out.println("Current award counts: " + awardCount);
+
+        /* ---------------------------------
+           STEP 5: Define award limits
+           --------------------------------- */
+        Map<String, Integer> awardLimits = new HashMap<>();
+        awardLimits.put("Best Oral", 2);
+        awardLimits.put("Best Poster", 2);
+        awardLimits.put("People Choice", 5);
+
+        /* ---------------------------------
+           STEP 6: Award dropdown (with limits)
            --------------------------------- */
         DefaultComboBoxModel<String> awardModel = new DefaultComboBoxModel<>();
-
-        if (awardCount.getOrDefault("Best Oral", 0) < 2)
-            awardModel.addElement("Best Oral");
-
-        if (awardCount.getOrDefault("Best Poster", 0) < 2)
-            awardModel.addElement("Best Poster");
-
-        if (awardCount.getOrDefault("People Choice", 0) < 3)
-            awardModel.addElement("People Choice");
+        
+        for (String awardType : awardLimits.keySet()) {
+            int current = awardCount.getOrDefault(awardType, 0);
+            int limit = awardLimits.get(awardType);
+            if (current < limit) {
+                awardModel.addElement(awardType);
+            }
+        }
 
         JComboBox<String> award = new JComboBox<>(awardModel);
         JComboBox<String> student = new JComboBox<>();
 
-        if (awardModel.getSize() == 0) {
-            award.addItem("All awards have been given");
-            award.setEnabled(false);
-            student.addItem("No eligible student");
-        }
-
         /* ---------------------------------
-           STEP 5: Update student list by award
+           STEP 7: Update student list by award
            --------------------------------- */
         award.addActionListener(e -> {
             student.removeAllItems();
 
-            if (!award.isEnabled()) {
-                student.addItem("No eligible student");
-                return;
-            }
-
             String selectedAward = award.getSelectedItem().toString();
             List<String> eligible = new ArrayList<>();
 
+            System.out.println("\n=== Processing Award: " + selectedAward + " ===");
+            System.out.println("Total evaluations: " + evaluations.size());
+
             for (String[] eval : evaluations) {
                 try {
+                    if (eval.length < 6) {
+                        System.out.println("Skipped: Row has insufficient columns (" + eval.length + ")");
+                        continue;
+                    }
+
                     String studentName = eval[0].trim();
 
-                    double total =
-                        Double.parseDouble(eval[2].trim()) +
-                        Double.parseDouble(eval[3].trim()) +
-                        Double.parseDouble(eval[4].trim()) +
-                        Double.parseDouble(eval[5].trim());
+                    double score1 = Double.parseDouble(eval[2].trim());
+                    double score2 = Double.parseDouble(eval[3].trim());
+                    double score3 = Double.parseDouble(eval[4].trim());
+                    double score4 = Double.parseDouble(eval[5].trim());
+                    double total = score1 + score2 + score3 + score4;
 
-                    // Score + already-awarded check
-                    if (total <= 90 || awardedStudents.contains(studentName))
+                    System.out.println("\nStudent: " + studentName + 
+                                     " | Scores: " + score1 + "," + score2 + "," + score3 + "," + score4 + 
+                                     " | Total: " + total);
+
+                    // Score check (minimum 70)
+                    if (total < 70) {
+                        System.out.println("  ✗ Rejected: Score too low (" + total + " < 70)");
                         continue;
+                    }
+
+                    // Already-awarded check
+                    if (awardedStudents.contains(studentName)) {
+                        System.out.println("  ✗ Rejected: Already awarded");
+                        continue;
+                    }
 
                     // Must exist in sessions
                     String sessionType = studentSessionType.get(studentName);
-                    if (sessionType == null)
+                    if (sessionType == null) {
+                        System.out.println("  ✗ Rejected: Not found in sessions");
                         continue;
+                    }
+
+                    System.out.println("  → Session Type: " + sessionType);
 
                     // Award-specific restrictions
                     if ("Best Oral".equals(selectedAward)
-                            && !"Oral".equalsIgnoreCase(sessionType))
+                            && !"Oral".equalsIgnoreCase(sessionType)) {
+                        System.out.println("  ✗ Rejected: Not an Oral session");
                         continue;
+                    }
 
                     if ("Best Poster".equals(selectedAward)
-                            && !"Poster".equalsIgnoreCase(sessionType))
+                            && !"Poster".equalsIgnoreCase(sessionType)) {
+                        System.out.println("  ✗ Rejected: Not a Poster session");
                         continue;
+                    }
 
+                    System.out.println("  ✓ ELIGIBLE!");
                     eligible.add(studentName);
 
+                } catch (NumberFormatException ex) {
+                    System.out.println("Error parsing scores: " + ex.getMessage());
                 } catch (Exception ex) {
-                    // Skip invalid row
+                    System.out.println("Error processing row: " + ex.getMessage());
+                    ex.printStackTrace();
                 }
             }
 
+            System.out.println("\nTotal eligible students: " + eligible.size());
+
             if (eligible.isEmpty()) {
                 student.addItem("No eligible student");
+                System.out.println("WARNING: No eligible students found for " + selectedAward);
             } else {
                 for (String s : eligible) {
                     student.addItem(s);
@@ -153,8 +198,10 @@ public class AwardNominationFrame extends JFrame {
             }
         });
 
-        if (award.isEnabled()) {
+        if (awardModel.getSize() > 0) {
             award.setSelectedIndex(0); // auto-load students
+        } else {
+            student.addItem("All awards have reached their limits");
         }
 
         /* ---------------------------------
@@ -169,12 +216,12 @@ public class AwardNominationFrame extends JFrame {
         panel.add(save, gbc);
 
         /* ---------------------------------
-           STEP 6: Save nomination
+           STEP 8: Save nomination
            --------------------------------- */
         save.addActionListener(e -> {
 
-            if (!award.isEnabled()
-                    || "No eligible student".equals(student.getSelectedItem())) {
+            if ("No eligible student".equals(student.getSelectedItem()) 
+                    || "All awards have reached their limits".equals(student.getSelectedItem())) {
                 JOptionPane.showMessageDialog(this,
                         "No valid nomination available",
                         "Warning",
