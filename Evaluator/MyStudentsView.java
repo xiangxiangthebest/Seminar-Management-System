@@ -3,84 +3,80 @@ package Evaluator;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 
 public class MyStudentsView extends JFrame {
 
-    private String evaluatorName;
+    private String lecturerName;
     private JTable table;
-    private DefaultTableModel tableModel;
+    private DefaultTableModel model;
 
-    public MyStudentsView(String evaluatorName) {
-        this.evaluatorName = evaluatorName;
+    public MyStudentsView(String lecturerName) {
+        this.lecturerName = lecturerName;
 
-        setTitle("My Students - " + evaluatorName);
+        setTitle("My Students - " + lecturerName);
         setSize(900, 400);
         setLocationRelativeTo(null);
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setLayout(new BorderLayout());
 
-        //Table Columns 
-        String[] columns = {
-                "Student ID",
-                "Student Name",
-                "Project Title",
-                "Presentation Type",
-                "Submission File"
-        };
-
-        tableModel = new DefaultTableModel(columns, 0);
-        table = new JTable(tableModel);
-
-        JScrollPane scrollPane = new JScrollPane(table);
-        add(scrollPane, BorderLayout.CENTER);
+        model = new DefaultTableModel(
+                new String[]{"Student ID", "Name", "Topic", "Description", "Presentation Type", "Submission File"}, 0);
+        table = new JTable(model);
+        add(new JScrollPane(table), BorderLayout.CENTER);
 
         loadStudents();
     }
 
-    // Load students 
     private void loadStudents() {
+        File file = new File("data/students.txt");
+        if (!file.exists()) {
+            JOptionPane.showMessageDialog(this, "students.txt not found!", "File Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
 
-        try (BufferedReader br = new BufferedReader(
-                new FileReader("data/students.txt"))) {
-
+        try (BufferedReader br = new BufferedReader(new FileReader(file))) {
             String line;
-
             while ((line = br.readLine()) != null) {
+                // Split by commas
+                String[] data = splitCSV(line);
+                if (data.length < 8) continue;
 
-                // Split CSV 
-                String[] data = line.split(",");
-
-                
-
-                if (data.length < 7) continue;
-
-                String studentId = data[0].trim();
+                String studentID = data[0].trim();
                 String name = data[1].trim();
-                String title = data[2].trim();
-                String supervisor = data[4].trim();
-                String type = data[5].trim();
-                String file = data[6].trim();
+                String supervisor = data[5].trim();
+                String topic = data[3].trim();
+                String description = data[4].trim();
+                String type = data[6].trim();
+                String submissionFile = data[7].trim();
 
                 
-                if (supervisor.equalsIgnoreCase(evaluatorName)) {
-                    tableModel.addRow(new Object[]{
-                            studentId,
-                            name,
-                            title,
-                            type,
-                            file
-                    });
+                if (supervisor.equalsIgnoreCase(lecturerName)) {
+                    model.addRow(new Object[]{studentID, name, topic, description, type, submissionFile});
                 }
             }
-
         } catch (IOException e) {
-            JOptionPane.showMessageDialog(this,
-                    "Error reading students file",
-                    "Error",
-                    JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error reading students.txt");
         }
+    }
+
+    
+    private String[] splitCSV(String line) {
+        java.util.List<String> result = new java.util.ArrayList<>();
+        boolean inQuotes = false;
+        StringBuilder sb = new StringBuilder();
+
+        for (char c : line.toCharArray()) {
+            if (c == '"') {
+                inQuotes = !inQuotes;
+            } else if (c == ',' && !inQuotes) {
+                result.add(sb.toString());
+                sb.setLength(0);
+            } else {
+                sb.append(c);
+            }
+        }
+        result.add(sb.toString());
+        return result.toArray(new String[0]);
     }
 }
