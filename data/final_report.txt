@@ -1,12 +1,5 @@
-Student: Alice | Evaluator: Dr. Ali | Marks: 25,25,22,20 | Comments: Excellent explanation | Total: 92.0
-Student: Bob | Evaluator: Dr. Siti | Marks: 22,20,18,20 | Comments: Good effort | Total: 80.0
-Student: Charlie | Evaluator: Dr. Kumar | Marks: 24,23,22,23 | Comments: Very clear | Total: 92.0
-Student: Diana | Evaluator: Dr. Tan | Marks: 26,25,24,25 | Comments: Outstanding | Total: 100.0
-Student: Ethan | Evaluator: Dr. Lim | Marks: 21,22,20,19 | Comments: Well done | Total: 82.0
-Student: Fiona | Evaluator: Dr. Lee | Marks: 22,23,21,20 | Comments: Good presentation | Total: 86.0
-Student: George | Evaluator: Dr. Noor | Marks: 25,24,23,22 | Comments: Excellent | Total: 94.0
 
 --- Analytics ---
-Total Students: 7
-Average Total Marks: 89.43
+Total Students: 1
+Average Total Marks: 0.00
 

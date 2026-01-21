@@ -62,7 +62,7 @@ public class EvaluatorDashboard extends JFrame {
                 new MySessionsView(evaluatorName).setVisible(true));
 
         btnViewSubmissions.addActionListener(e ->
-                new ViewSubmissionsView(evaluatorName).setVisible(true));
+                new ViewSubmissionView(evaluatorName).setVisible(true));
 
         btnEvaluateStudents.addActionListener(e ->
                 new EvaluateSessionView(evaluatorName).setVisible(true));

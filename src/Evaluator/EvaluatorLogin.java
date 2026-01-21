@@ -19,12 +19,12 @@ public class EvaluatorLogin extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null); 
 
-        // ===== MAIN PANEL =====
+        
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
         mainPanel.setBorder(BorderFactory.createEmptyBorder(20, 50, 20, 50)); 
 
-        // ===== USER PANEL =====
+        
         JPanel userPanel = new JPanel(new BorderLayout(5, 5));
         JLabel lblUser = new JLabel("Username:");
         txtUsername = new JTextField();
@@ -33,7 +33,7 @@ public class EvaluatorLogin extends JFrame {
         mainPanel.add(userPanel);
         mainPanel.add(Box.createVerticalStrut(15)); 
 
-        //PASSWORD PANEL
+        
         JPanel passPanel = new JPanel(new BorderLayout(5, 5));
         JLabel lblPass = new JLabel("Password:");
         txtPassword = new JPasswordField();
@@ -42,14 +42,14 @@ public class EvaluatorLogin extends JFrame {
         mainPanel.add(passPanel);
         mainPanel.add(Box.createVerticalStrut(20));
 
-        //LOGIN BUTTON 
+       
         btnLogin = new JButton("Login");
         btnLogin.setAlignmentX(Component.CENTER_ALIGNMENT);
         mainPanel.add(btnLogin);
 
         mainPanel.add(Box.createVerticalStrut(15)); 
 
-        //MESSAGE LABEL
+        
         lblMessage = new JLabel("", SwingConstants.CENTER);
         lblMessage.setForeground(Color.RED);
         lblMessage.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -61,7 +61,7 @@ public class EvaluatorLogin extends JFrame {
         btnLogin.addActionListener(e -> login());
     }
 
-    // LOGIN 
+    
     private void login() {
         String username = txtUsername.getText().trim();
         String password = new String(txtPassword.getPassword());
@@ -80,25 +80,31 @@ public class EvaluatorLogin extends JFrame {
         }
     }
 
-    // CHECK evaluator.txt
+    
     private boolean evaluatorExists(String username) {
-        try {
-            BufferedReader br = new BufferedReader(
-                    new FileReader("data/evaluators.txt"));
+    File file = new File("data/evaluators.txt");
 
-            String line;
-            while ((line = br.readLine()) != null) {
-                if (line.trim().equalsIgnoreCase(username)) {
-                    br.close();
-                    return true;
-                }
-            }
-            br.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    if (!file.exists()) {
+        JOptionPane.showMessageDialog(this,
+                "evaluators.txt not found!\nExpected at: " + file.getAbsolutePath(),
+                "File Error",
+                JOptionPane.ERROR_MESSAGE);
         return false;
     }
+
+    try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+        String line;
+        while ((line = br.readLine()) != null) {
+            if (line.trim().equalsIgnoreCase(username.trim())) {
+                return true;
+            }
+        }
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+    return false;
+}
+
 
     
     public static void main(String[] args) {
