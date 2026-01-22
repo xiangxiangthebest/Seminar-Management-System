@@ -1,4 +1,4 @@
-Best Oral,1
-Best Poster,0
-
+Best Oral,2
+Best Poster,1
+People Choice,1
 
